@@ -1,0 +1,7 @@
+{
+    "name": "node_server",
+    "main": "src/app.js",
+    "dependencies": {
+        "serialport": "^6.2.0"
+    }
+}
