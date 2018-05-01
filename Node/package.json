@@ -9,7 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Wundergran",
   "license": "ISC",
-  "description": ""
+  "description": "Node server for logging temp data from Arduino",
+  "keywords": [
+    "Arduino",
+    "Sensor",
+    "Logger"
+  ]
 }
