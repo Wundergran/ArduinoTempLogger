@@ -1,9 +1,9 @@
-const SerialPort = require('serialport');
+const SerialPort = require('serialport')
+const FileWriter = require('fs')
 
 var sPort = new SerialPort('COM6', {
   baudRate: 57600
-});
-sPort.on('data', function(data) {
+}).on('data', function(data) {
   dataRead(data)
 })
 
@@ -17,7 +17,7 @@ function dataRead (data) {
     }
     console.log(json)
   } else {
-    console.log('Threw away garbage: ' + data.toString())
+    console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
   }
 }
 
@@ -30,6 +30,6 @@ function verifyData (data) {
 function saveData (jsonData) {
   tempLog.push(jsonData)
   if (tempLog.length > 60) { // save to disk
-
+    
   }
 }
