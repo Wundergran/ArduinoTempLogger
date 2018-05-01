@@ -15,7 +15,7 @@ void setup(){
   
   lcd.begin(16, 2);
   lcd.clear();
-  Serial.begin(9600);
+  Serial.begin(57600);
 }
 
 void loop(){
