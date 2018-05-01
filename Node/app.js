@@ -1,8 +1,7 @@
 const SerialPort = require('serialport')
 const FileWriter = require('fs')
 var firebase = require('firebase')
-
-initFirebase()
+var dataRef = initFirebase()
 
 var sPort = new SerialPort('COM6', {
   baudRate: 57600
@@ -19,6 +18,7 @@ function dataRead (data) {
       temp: data.toString()
     }
     console.log(json)
+    saveData(json)
   } else {
     console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
   }
@@ -31,10 +31,7 @@ function verifyData (data) {
 }
 
 function saveData (jsonData) {
-  tempLog.push(jsonData)
-  if (tempLog.length > 60) { // save to disk
-    
-  }
+  dataRef.child('datalogs').push().set(jsonData)
 }
 
 function initFirebase () {
@@ -43,6 +40,6 @@ function initFirebase () {
     authDomain: "templogger-25118.firebaseapp.com",
     databaseURL: "https://templogger-25118.firebaseio.com/"
   };
-  firebase.initializeApp(config);
-  console.log(firebase.app)
+  firebase.initializeApp(config)
+  return firebase.database().ref()
 }
