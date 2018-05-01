@@ -1,5 +1,8 @@
 const SerialPort = require('serialport')
 const FileWriter = require('fs')
+var firebase = require('firebase')
+
+initFirebase()
 
 var sPort = new SerialPort('COM6', {
   baudRate: 57600
@@ -32,4 +35,14 @@ function saveData (jsonData) {
   if (tempLog.length > 60) { // save to disk
     
   }
+}
+
+function initFirebase () {
+  var config = {
+    apiKey: "AIzaSyDxuE3nv124EJozpiD4nWLJFgQ965OcMR0",
+    authDomain: "templogger-25118.firebaseapp.com",
+    databaseURL: "https://templogger-25118.firebaseio.com/"
+  };
+  firebase.initializeApp(config);
+  console.log(firebase.app)
 }
