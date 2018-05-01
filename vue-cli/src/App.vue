@@ -1,8 +1,10 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app class="app" dark>
+    <v-toolbar>
+      <v-toolbar-title>Arduino Temperature Logger</v-toolbar-title>
+    </v-toolbar>
+    
+  </v-app>
 </template>
 
 <script>
