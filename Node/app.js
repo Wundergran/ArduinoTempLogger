@@ -20,7 +20,6 @@ async function dataRead (data) {
       time: Date.now(),
       temp: data.toString()
     }
-    console.log(json)
     saveData(json)
   } else {
     console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
@@ -37,7 +36,7 @@ async function saveData (jsonData) {
   try {
 		const db = await dbPromise
     await db.exec(`INSERT INTO ${TABLE} (${FLD_TIME}, ${FLD_TEMP}) VALUES (${jsonData.time}, ${jsonData.temp})`)
-    console.log('Inserted: ' + jsonData.time)
+    console.log(`INSERT: ${jsonData.time} - ${jsonData.temp}`)
 	} catch (err) {
 		console.log(err)
 	}
