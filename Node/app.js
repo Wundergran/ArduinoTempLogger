@@ -1,6 +1,11 @@
+import sqlite from 'sqlite';
+
 const SerialPort = require('serialport')
 const FileWriter = require('fs')
 var firebase = require('firebase')
+
+
+
 var dataRef = initFirebase()
 
 var sPort = new SerialPort('COM6', {
