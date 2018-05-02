@@ -13,15 +13,6 @@
 </template>
 
 <script>
-const firebase = require('firebase')
-const firebaseApp = firebase.initializeApp(config);
-const config = {
-  apiKey: "AIzaSyDxuE3nv124EJozpiD4nWLJFgQ965OcMR0",
-  authDomain: "templogger-25118.firebaseapp.com",
-  databaseURL: "https://templogger-25118.firebaseio.com/"
-};
-var db = firebaseApp.database()
-
 export default {
   name: 'app',
   firebase: {
