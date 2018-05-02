@@ -1,5 +1,7 @@
 const sqlite = require('sqlite')
 const SerialPort = require('serialport')
+const WebSocket = require('ws')
+
 const dbPromise = sqlite.open('./testdb.sqlite', { Promise })
 
 const TABLE = 'tempdata'
@@ -11,6 +13,16 @@ var sPort = new SerialPort('COM6', {
 }).on('data', function(data) {
   dataRead(data)
 })
+
+const wss = new WebSocket.Server({ port: 3000 });
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
+});
 
 var tempLog = []
 
