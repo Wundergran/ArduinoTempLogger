@@ -1,7 +1,7 @@
+const sqlite = require('sqlite')
+const dbPromise = sqlite.open('./testdb.sqlite', { Promise })
+
 const SerialPort = require('serialport')
-const FileWriter = require('fs')
-var firebase = require('firebase')
-var dataRef = initFirebase()
 
 var sPort = new SerialPort('COM6', {
   baudRate: 57600
@@ -31,15 +31,5 @@ function verifyData (data) {
 }
 
 function saveData (jsonData) {
-  dataRef.child('datalogs').push().set(jsonData)
-}
-
-function initFirebase () {
-  var config = {
-    apiKey: "AIzaSyDxuE3nv124EJozpiD4nWLJFgQ965OcMR0",
-    authDomain: "templogger-25118.firebaseapp.com",
-    databaseURL: "https://templogger-25118.firebaseio.com/"
-  };
-  firebase.initializeApp(config)
-  return firebase.database().ref()
+  
 }
