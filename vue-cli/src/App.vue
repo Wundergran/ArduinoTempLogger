@@ -6,23 +6,25 @@
     <div class="content">
       <div class="temp-text display-2 white--text">Current temperature: 33</div>
       <div class="card elevation-5">
-        <div class="test" v-for="log in temps" :key="log.time"></div>
+        
       </div>
     </div>
   </v-app>
 </template>
 
 <script>
+const WebSocket = require('ws')
+
 export default {
   name: 'app',
-  firebase: {
-    temps: db.ref().child('datalogs')
-  },
   components: {
     
   },
   created () {
-
+    var ws = new WebSocket("ws://localhost:8080")
+    ws.onopen = function (event) {
+      console.log('ws open')
+    }
   }
 }
 </script>
