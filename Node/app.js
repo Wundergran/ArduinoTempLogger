@@ -1,7 +1,10 @@
 const sqlite = require('sqlite')
+const SerialPort = require('serialport')
 const dbPromise = sqlite.open('./testdb.sqlite', { Promise })
 
-const SerialPort = require('serialport')
+const TABLE = 'tempdata'
+const FLD_TIME = 'time'
+const FLD_TEMP = 'temp'
 
 var sPort = new SerialPort('COM6', {
   baudRate: 57600
@@ -11,7 +14,7 @@ var sPort = new SerialPort('COM6', {
 
 var tempLog = []
 
-function dataRead (data) {
+async function dataRead (data) {
   if (verifyData(data)) {
     var json = {
       time: Date.now(),
@@ -30,6 +33,12 @@ function verifyData (data) {
   return value.length === 5
 }
 
-function saveData (jsonData) {
-  
+async function saveData (jsonData) {
+  try {
+		const db = await dbPromise
+    await db.exec(`INSERT INTO ${TABLE} (${FLD_TIME}, ${FLD_TEMP}) VALUES (${jsonData.time}, ${jsonData.temp})`)
+    console.log('Inserted: ' + jsonData.time)
+	} catch (err) {
+		console.log(err)
+	}
 }
