@@ -2,19 +2,19 @@ const sqlite = require('sqlite')
 const SerialPort = require('serialport')
 const WebSocket = require('ws')
 
-const dbPromise = sqlite.open('./testdb.sqlite', { Promise })
+const dbPromise = sqlite.open('./database.sqlite', { Promise })
 
 const TABLE = 'tempdata'
 const FLD_TIME = 'time'
 const FLD_TEMP = 'temp'
 
-var sPort = new SerialPort('COM6', {
+var sPort = new SerialPort('COM5', {
   baudRate: 57600
 }).on('data', function(data) {
   dataRead(data)
 })
 
-const wss = new WebSocket.Server({ port: 8080 });
+/* const wss = new WebSocket.Server({ port: 3000 });
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
@@ -22,9 +22,7 @@ wss.on('connection', function connection(ws) {
   });
 
   ws.send('something');
-});
-
-var tempLog = []
+}); */
 
 async function dataRead (data) {
   if (verifyData(data)) {
