@@ -21,7 +21,7 @@ export default {
     
   },
   created () {
-    var ws = new WebSocket("ws://localhost:8080")
+    var ws = new WebSocket("ws://localhost:3000/data")
     ws.onopen = function (event) {
       console.log('ws open')
     }
