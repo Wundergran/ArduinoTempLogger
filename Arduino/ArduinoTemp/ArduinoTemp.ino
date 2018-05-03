@@ -4,7 +4,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 double temp;
 float avgRawTemp;
 double tempAvg;
-int offset = 1;
+int offset = -3;
 double arrayCnt = 0;
 
 float temps = 0.0;
