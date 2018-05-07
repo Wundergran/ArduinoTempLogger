@@ -6,6 +6,7 @@ float avgRawTemp;
 double tempAvg;
 int offset = -3;
 double arrayCnt = 0;
+int tempArrayCnt = 0;
 
 float temps = 0.0;
 
@@ -20,28 +21,39 @@ void setup(){
 
 void loop(){
 
-  if(arrayCnt < 100000){
+  if(arrayCnt < 400000){
     temps = temps + (analogRead(A0) + offset);
     arrayCnt++;
+    tempArrayCnt++;
   }else{
+    setTemp();
     arrayCnt = 0;
-    avgRawTemp = temps/100000;
-    printTemp();
+    printToSerial();
     temps = 0.0;
+  }
+  if(tempArrayCnt > 30000) {
+    printTemp();
+    tempArrayCnt = 0;
   }
 }
 
 void printTemp(){
-    float voltage = (avgRawTemp/1024.0)*5;
-    temp = (voltage - .5)*100;
-    
+    setTemp();
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Temperature:");
     lcd.setCursor(0, 1);
     lcd.print(temp);
     lcd.print("c");
+}
 
-    Serial.print(temp);
+void printToSerial() {
+  Serial.print(temp);
+}
+
+void setTemp() {
+  avgRawTemp = temps/arrayCnt;
+  float voltage = (avgRawTemp/1024.0)*5;
+  temp = (voltage - .5)*100;
 }
 
