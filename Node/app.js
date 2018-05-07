@@ -9,6 +9,8 @@ const TABLE = 'tempdata'
 const FLD_TIME = 'time'
 const FLD_TEMP = 'temp'
 
+var wsClient = null
+
 var sPort = new SerialPort('COM5', {
   baudRate: 57600
 }).on('data', function(data) {
@@ -17,11 +19,15 @@ var sPort = new SerialPort('COM5', {
 
 io.on('connection', function(client){
 	console.log('connected to localhost')
-	client.emit('hello', { hello: 'world' })
+  wsClient = client
 
 	client.on('event', function(data){});
-	client.on('disconnect', function(){});
+	client.on('disconnect', function(){ 
+    wsClient = null
+    console.log('client disconnected') 
+  });
 });
+
 try{
 	io.origins('localhost:8080')
 	io.listen(3000)
@@ -43,7 +49,6 @@ async function dataRead (data) {
 
 function verifyData (data) {
   var value = data.toString()
-  
   return value.length === 5
 }
 
