@@ -1,6 +1,7 @@
 const sqlite = require('sqlite')
 const SerialPort = require('serialport')
-// const WebSocket = require('ws')
+var server = require('http').createServer();
+var io = require('socket.io')(server);
 
 const dbPromise = sqlite.open('./database.sqlite', { Promise })
 
@@ -14,15 +15,19 @@ var sPort = new SerialPort('COM5', {
   dataRead(data)
 })
 
-/* const wss = new WebSocket.Server({ port: 3000 });
+io.on('connection', function(client){
+	console.log('connected to localhost')
+	client.emit('hello', { hello: 'world' })
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
-
-  ws.send('something');
-}); */
+	client.on('event', function(data){});
+	client.on('disconnect', function(){});
+});
+try{
+	io.origins('localhost:8080')
+	io.listen(3000)
+} catch (err) {
+	console.log(err)
+}
 
 async function dataRead (data) {
   if (verifyData(data)) {
