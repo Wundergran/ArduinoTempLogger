@@ -21,8 +21,11 @@ export default {
     
   },
   sockets: {
-    connect: function(){
+    connect () {
       console.log('socket connected')
+    },
+    hello (val) {
+      console.log(val)
     }
   },
   created () {
