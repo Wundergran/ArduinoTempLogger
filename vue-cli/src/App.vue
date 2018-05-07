@@ -13,18 +13,23 @@
 </template>
 
 <script>
-const io = require('socket.io-client')
+// const io = require('socket.io-client')
 
 export default {
   name: 'app',
   components: {
     
   },
+  sockets: {
+    connect: function(){
+      console.log('socket connected')
+    }
+  },
   created () {
-    var ws = io("http://localhost")
+    /* var ws = io("http://localhost")
     ws.onopen = function (event) {
       console.log('ws open')
-    }
+    } */
   }
 }
 </script>

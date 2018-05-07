@@ -12,6 +12,7 @@
     "material-design-icons-iconfont": "^3.0.3",
     "socket.io-client": "^2.1.0",
     "vue": "^2.5.16",
+    "vue-socket.io": "^2.1.1-b",
     "vuefire": "^1.4.5",
     "vuetify": "^1.0.17",
     "ws": "^5.1.1"
