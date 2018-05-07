@@ -1,6 +1,6 @@
 const sqlite = require('sqlite')
 const SerialPort = require('serialport')
-const WebSocket = require('ws')
+// const WebSocket = require('ws')
 
 const dbPromise = sqlite.open('./database.sqlite', { Promise })
 
