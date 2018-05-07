@@ -13,7 +13,7 @@
 </template>
 
 <script>
-const WebSocket = require('ws')
+const io = require('socket.io-client')
 
 export default {
   name: 'app',
@@ -21,7 +21,7 @@ export default {
     
   },
   created () {
-    var ws = new WebSocket("ws://localhost:3000/data")
+    var ws = io("http://localhost")
     ws.onopen = function (event) {
       console.log('ws open')
     }
