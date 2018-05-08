@@ -27,12 +27,13 @@ io.on('connection', function(client){
 	console.log('connected to localhost')
   // wsClient = client
   // client.emit('last-temp', latestTemp)
-  client.on('listen', function (args) {
+  client.on('listen', async function (args) {
     eventEmitter.on(DATA_EVENT, async function (args) { // listen for database changes
       const data = await fetchTemps(args.since)
       client.emit('temps', data)
       client.emit('lasttemp', latestTemp)
     })
+    client.emit('temps', await fetchTemps('1525755600000'))
   })
 	client.on('disconnect', function(){ 
     wsClient = null
@@ -83,6 +84,9 @@ async function saveData (jsonData) {
 
 async function fetchTemps (time) {
   try {
+    if (!database) {
+      database = await dbPromise
+    }
     return temps = await database.all(`SELECT * FROM ${TABLE} WHERE ${FLD_TIME} > ${time}`)
   } catch (err) {
     console.log(err)
