@@ -4,35 +4,28 @@
       <v-toolbar-title>Arduino Temp Logger</v-toolbar-title>
     </v-toolbar>
     <div class="content">
-      <div class="temp-text display-2 white--text">Current temperature: 33</div>
-      <div class="card elevation-5">
-        
-      </div>
+      <div class="temp-text display-2 white--text">Current temperature: {{ lastTemp.temp }}</div>
+      <div class="card elevation-5" v-if="false"></div>
     </div>
   </v-app>
 </template>
 
 <script>
-// const io = require('socket.io-client')
-
 export default {
   name: 'app',
-  components: {
-    
+  data () {
+    return {
+      lastTemp: {}
+    }
   },
   sockets: {
     connect () {
-      console.log('socket connected')
+      console.log('connected localhost:3000')
     },
-    hello (val) {
+    lasttemp (val) {
       console.log(val)
+      this.lastTemp = val
     }
-  },
-  created () {
-    /* var ws = io("http://localhost")
-    ws.onopen = function (event) {
-      console.log('ws open')
-    } */
   }
 }
 </script>
@@ -45,9 +38,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-.content {
-  
 }
 .card {
   height: 300px;

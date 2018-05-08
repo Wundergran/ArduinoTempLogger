@@ -10,6 +10,7 @@ const FLD_TIME = 'time'
 const FLD_TEMP = 'temp'
 
 var wsClient = null
+var latestTemp = null // Default void
 
 var sPort = new SerialPort('COM5', {
   baudRate: 57600
@@ -20,8 +21,7 @@ var sPort = new SerialPort('COM5', {
 io.on('connection', function(client){
 	console.log('connected to localhost')
   wsClient = client
-
-	client.on('event', function(data){});
+  client.emit('last-temp', latestTemp)
 	client.on('disconnect', function(){ 
     wsClient = null
     console.log('client disconnected') 
@@ -35,6 +35,16 @@ try{
 	console.log(err)
 }
 
+function emitReading(data) {
+  if (wsClient && wsClient !== null && data) {
+    try {
+      wsClient.emit('lasttemp', data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
 async function dataRead (data) {
   if (verifyData(data)) {
     var json = {
@@ -42,6 +52,7 @@ async function dataRead (data) {
       temp: data.toString()
     }
     saveData(json)
+    emitReading(json)
   } else {
     console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
   }
@@ -53,6 +64,7 @@ function verifyData (data) {
 }
 
 async function saveData (jsonData) {
+  latestTemp = jsonData
   try {
 		const db = await dbPromise
     await db.exec(`INSERT INTO ${TABLE} (${FLD_TIME}, ${FLD_TEMP}) VALUES (${jsonData.time}, ${jsonData.temp})`)
