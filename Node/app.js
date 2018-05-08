@@ -14,7 +14,6 @@ const FLD_TEMP = 'temp'
 
 const DATA_EVENT = 'new-data'
 
-var wsClient = null
 var latestTemp = null // Default void
 
 var sPort = new SerialPort('COM5', {
@@ -25,18 +24,15 @@ var sPort = new SerialPort('COM5', {
 
 io.on('connection', function(client){
 	console.log('connected to localhost')
-  // wsClient = client
-  // client.emit('last-temp', latestTemp)
   client.on('listen', async function (args) {
     eventEmitter.on(DATA_EVENT, async function (args) { // listen for database changes
       const data = await fetchTemps(args.since)
       client.emit('temps', data)
       client.emit('lasttemp', latestTemp)
     })
-    client.emit('temps', await fetchTemps('1525755600000'))
+    client.emit('temps', await fetchTemps(args.since)) // send already existing data first
   })
 	client.on('disconnect', function(){ 
-    wsClient = null
     console.log('client disconnected') 
   });
 });
