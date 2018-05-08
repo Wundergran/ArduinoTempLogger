@@ -5,6 +5,7 @@ var server = require('http').createServer();
 var io = require('socket.io')(server);
 
 const dbPromise = sqlite.open('./database.sqlite', { Promise })
+var database = null
 const eventEmitter = new Events.EventEmitter()
 
 const TABLE = 'tempdata'
@@ -27,8 +28,10 @@ io.on('connection', function(client){
   // wsClient = client
   // client.emit('last-temp', latestTemp)
   client.on('listen', function (args) {
-    eventEmitter.on(DATA_EVENT, function () { // listen for database changes
-      
+    eventEmitter.on(DATA_EVENT, async function (args) { // listen for database changes
+      const data = await fetchTemps(args.since)
+      client.emit('temps', data)
+      client.emit('lasttemp', latestTemp)
     })
   })
 	client.on('disconnect', function(){ 
@@ -44,16 +47,6 @@ try{
 	console.log(err)
 }
 
-function emitReading(data) {
-  if (wsClient && wsClient !== null && data) {
-    try {
-      wsClient.emit('lasttemp', data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
-
 async function dataRead (data) {
   if (verifyData(data)) {
     var json = {
@@ -61,7 +54,7 @@ async function dataRead (data) {
       temp: data.toString()
     }
     saveData(json)
-    emitReading(json)
+    latestTemp = json
   } else {
     console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
   }
@@ -72,15 +65,26 @@ function verifyData (data) {
   return value.length === 5
 }
 
+// Database functions
 async function saveData (jsonData) {
   latestTemp = jsonData
   try {
     const query = `INSERT INTO ${TABLE} (${FLD_TIME}, ${FLD_TEMP}) VALUES (${jsonData.time}, ${jsonData.temp})`
-		const db = await dbPromise
-    await db.exec(query)
+    if (!database) {
+      database = await dbPromise
+    }
+    await database.exec(query)
     eventEmitter.emit(DATA_EVENT)
     console.log('EXECUTED: ' + query)
 	} catch (err) {
 		console.log(err)
 	}
+}
+
+async function fetchTemps (time) {
+  try {
+    return temps = await database.all(`SELECT * FROM ${TABLE} WHERE ${FLD_TIME} > ${time}`)
+  } catch (err) {
+    console.log(err)
+  }
 }
