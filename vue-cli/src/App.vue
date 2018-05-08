@@ -21,10 +21,14 @@ export default {
   sockets: {
     connect () {
       console.log('connected localhost:3000')
+      this.$socket.emit('listen', { since: '1525755600000' })
     },
     lasttemp (val) {
       console.log(val)
       this.lastTemp = val
+    },
+    temps (val) {
+      console.log(val)
     }
   }
 }
