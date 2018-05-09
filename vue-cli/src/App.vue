@@ -6,16 +6,19 @@
     <div class="content">
       <div class="temp-text display-2 white--text">Current temperature: {{ lastTemp.temp }}</div>
       <div class="card elevation-5" v-if="false"></div>
+      <line-chart :data="temps"></line-chart>
     </div>
   </v-app>
 </template>
 
 <script>
+import LineChart from './components/LineChart.vue'
 export default {
   name: 'app',
   data () {
     return {
-      lastTemp: {}
+      lastTemp: {},
+      temps: {}
     }
   },
   sockets: {
@@ -28,8 +31,11 @@ export default {
       this.lastTemp = val
     },
     temps (val) {
-      console.log(val)
+      this.temps = val
     }
+  },
+  components: {
+    LineChart
   }
 }
 </script>
