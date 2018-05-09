@@ -9,11 +9,11 @@ import { Line } from 'vue-chartjs'
 	export default {
 		props: ['data'],
 		mounted () {
-			this.renderChart(this.data)
+			// this.renderChart(this.data)
 		},
 		watch: {
-			data (val) {
-				this.renderChart(this.data)
+			data () {
+				Line.renderChart(this.data)
 			}
 		},
 		components: {
