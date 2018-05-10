@@ -19,16 +19,18 @@ export default {
     },
     computed: {
       computedData () {
-        var data = {
-          labels: this.data.map(a => a.time),
-          datasets: [{
-            label: 'Temperature',
-            backgroundColor: '#f87979',
-            data: this.data.map(a => a.temp)
-          }]
+        if(this.data) {
+          console.log(this.data)
+          var data = {
+            labels: this.data.map(a => a.time),
+            datasets: [{
+              label: 'Temperature',
+              backgroundColor: '#f87979',
+              data: this.data.map(a => a.temp)
+            }]
+          }
         }
-        console.log(data.datasets)
-        return data
+        return data || null
       }
     }
   }
