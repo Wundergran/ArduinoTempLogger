@@ -6,7 +6,7 @@
     <div class="content">
       <div class="temp-text display-2 white--text">Current temperature: {{ lastTemp.temp }}</div>
       <div class="card elevation-5" v-if="false"></div>
-      <chart></chart>
+      <chart :data="temps"></chart>
     </div>
   </v-app>
 </template>
@@ -24,13 +24,14 @@ export default {
   sockets: {
     connect () {
       console.log('connected localhost:3000')
-      this.$socket.emit('listen', { since: '1525755600000' })
+      this.$socket.emit('listen', { since: '1525852800000' })
     },
     lasttemp (val) {
       console.log(val)
       this.lastTemp = val
     },
     temps (val) {
+      console.log(val)
       this.temps = val
     }
   },
