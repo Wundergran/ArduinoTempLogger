@@ -15,6 +15,7 @@ const FLD_TEMP = 'temp'
 const DATA_EVENT = 'new-data'
 
 var latestTemp = null // Default void
+var temps = []
 
 var sPort = new SerialPort('COM5', {
   baudRate: 57600
@@ -49,13 +50,15 @@ try{
 	console.log(err)
 }
 
+ saveDataTimer() // Store data once every 3 mins
+
 async function dataRead (data) {
   if (verifyData(data)) {
     var json = {
       time: Date.now(),
       temp: data.toString()
     }
-    saveData(json)
+    temps.push(json)
     latestTemp = json
   } else {
     console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
@@ -69,7 +72,6 @@ function verifyData (data) {
 
 // Database functions
 async function saveData (jsonData) {
-  latestTemp = jsonData
   try {
     const query = `INSERT INTO ${TABLE} (${FLD_TIME}, ${FLD_TEMP}) VALUES (${jsonData.time}, ${jsonData.temp})`
     if (!database) {
@@ -92,4 +94,19 @@ async function fetchTemps (time) {
   } catch (err) {
     console.log(err)
   }
+}
+
+async function saveDataTimer () {
+  if (temps.length > 0) {
+    var tempTotal = 0
+    temps.forEach(element => {
+      tempTotal += Number(element.temp)
+    })
+    var tempAvg = tempTotal / temps.length
+    var currentTime = Date.now()
+    saveData({ time: currentTime, temp: tempAvg })
+    temps = []
+  }
+
+  setTimeout(saveDataTimer, 1800000) // Store data once every 30 mins
 }
