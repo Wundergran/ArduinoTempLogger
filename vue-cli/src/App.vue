@@ -18,13 +18,16 @@ export default {
   data () {
     return {
       lastTemp: {},
-      temps: {}
+      temps: null
     }
   },
   sockets: {
     connect () {
       console.log('connected localhost:3000')
-      this.$socket.emit('listen', { since: '1525852800000' })
+      var today = new Date()
+      var yesterday = today - 86400000 // One day in millis: 86400000
+
+      this.$socket.emit('listen', { since: yesterday })
     },
     lasttemp (val) {
       console.log(val)
