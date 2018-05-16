@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <line-chart :chart-data="computedData" :options="options"></line-chart>
+    <line-chart class="chart"
+      :chart-data="computedData" 
+      :options="options"
+      :height="700"
+      :width="1200"></line-chart>
   </div>
 </template>
 <script>
@@ -13,19 +17,24 @@ export default {
     data () {
       return {
         options: {
-          responsive: true
+          responsive: false
         }
+      }
+    },
+    methods: {
+      getDateStrFor (time) {
+        var date = new Date(time)
+        return date.toLocaleTimeString()
       }
     },
     computed: {
       computedData () {
-        if(this.data) {
-          console.log(this.data)
+        if (this.data) {
           var data = {
-            labels: this.data.map(a => a.time),
+            labels: this.data.map(a => this.getDateStrFor(a.time)),
             datasets: [{
               label: 'Temperature',
-              backgroundColor: '#f87979',
+              backgroundColor: '#90a4ae',
               data: this.data.map(a => a.temp)
             }]
           }
@@ -36,9 +45,6 @@ export default {
   }
 </script>
 <style scoped>
-  .container {
-    max-height: 500px;
-    max-width: 50%;
-  }
+
 </style>
 
