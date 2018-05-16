@@ -25,12 +25,13 @@ var sPort = new SerialPort('COM5', {
 
 io.on('connection', function(client){
   console.log('connected to localhost')
-  const eventListener = async () => {
-    const data = await fetchTemps(args.since)
-    client.emit('temps', data)
-    client.emit('lasttemp', latestTemp)
-  }
+  var eventListener = null 
   client.on('listen', async function (args) {
+    eventListener = async () => {
+      const data = await fetchTemps(args.since)
+      client.emit('temps', data)
+      client.emit('lasttemp', latestTemp)
+    }
     eventEmitter.on(DATA_EVENT, eventListener) // listen for database changes
     client.emit('temps', await fetchTemps(args.since)) // send already existing data first
     if (latestTemp) {
