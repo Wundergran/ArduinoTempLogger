@@ -3,7 +3,7 @@
     <line-chart class="chart"
       :chart-data="computedData" 
       :options="options"
-      :height="700"
+      :height="500"
       :width="1200">
     </line-chart>
   </div>
