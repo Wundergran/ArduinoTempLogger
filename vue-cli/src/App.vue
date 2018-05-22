@@ -1,12 +1,13 @@
 <template>
-  <v-app class="app" dark>
+  <v-app class="app">
     <v-toolbar>
       <v-toolbar-title>Arduino Temp Logger</v-toolbar-title>
     </v-toolbar>
     <div class="content">
-      <div class="temp-text display-2 white--text">Current temperature: {{ lastTemp.temp }}</div>
-      <div class="card elevation-5" v-if="false"></div>
-      <chart :data="temps"></chart>
+      <div class="temp-text display-3">The temperature is now {{ lastTemp.temp }}c</div>
+      <div class="card elevation-5">
+        <chart :data="temps"></chart>
+      </div>
     </div>
   </v-app>
 </template>
@@ -51,12 +52,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+.temp-text {
+  text-align: start;
+  color: #424242;
 }
 .card {
-  height: 300px;
   min-width: 300px;
-  margin: auto;
-  background-color: white;
+  padding: 16px;
+  background-color: #ECEFF1;
 }
 </style>
