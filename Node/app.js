@@ -17,10 +17,14 @@ const DATA_EVENT = 'new-data'
 var latestTemp = null // Default void
 var temps = []
 
+var trashReads = 0
+var totalReads = 0
+
 var sPort = new SerialPort('COM5', {
   baudRate: 57600
 }).on('data', function(data) {
   dataRead(data)
+  totalReads++
 })
 
 io.on('connection', function(client){
@@ -44,7 +48,7 @@ io.on('connection', function(client){
   });
 });
 
-try{
+try {
 	io.origins('localhost:8080')
 	io.listen(3000)
 } catch (err) {
@@ -62,7 +66,8 @@ async function dataRead (data) {
     temps.push(json)
     latestTemp = json
   } else {
-    console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
+    //console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
+    trashReads++
   }
 }
 
@@ -81,6 +86,11 @@ async function saveData (jsonData) {
     await database.exec(query)
     eventEmitter.emit(DATA_EVENT)
     console.log('EXECUTED: ' + query)
+    // Calculate trash rate
+    var trashRate = (totalReads - (trashReads/2))/totalReads * 100 // Percentage trash
+    console.log(`Trash rate now at ${trashRate}%`)
+    totalReads = 0
+    trashReads = 0
 	} catch (err) {
 		console.log(err)
 	}
