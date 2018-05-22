@@ -53,6 +53,7 @@ export default {
   display: flex;
   flex-direction: column;
   margin: auto;
+  margin-top: 24px;
 }
 .temp-text {
   text-align: start;
