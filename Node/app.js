@@ -44,6 +44,9 @@ io.on('connection', function(client){
     }
     eventEmitter.on(DATA_EVENT, eventListener) // listen for database changes
     client.emit('temps', await fetchTemps(args.since)) // send already existing data first
+    if (latestTemp) {
+      client.emit('lasttemp', latestTemp)
+    }
   })
 	client.on('disconnect', function(){ 
     console.log('client disconnected, event listeners destroyed')
