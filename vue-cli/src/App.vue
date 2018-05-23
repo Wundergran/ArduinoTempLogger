@@ -4,9 +4,9 @@
       <v-toolbar-title>Arduino Temp Logger</v-toolbar-title>
     </v-toolbar>
     <div class="content">
-      <div class="temp-text display-3">The temperature is now {{ lastTemp.temp }}c</div>
+      <div class="temp-text display-3" v-if="lastTemp.temp">The temperature is now {{ lastTemp.temp }}°C</div>
       <div class="card elevation-2">
-        <chart :data="temps"></chart>
+        <chart :data="temps" v-if="temps"></chart>
       </div>
     </div>
   </v-app>
@@ -46,6 +46,8 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500');
+
 .app {
   background-color: #FAFAFA;
 }
@@ -57,7 +59,9 @@ export default {
 }
 .temp-text {
   text-align: start;
-  color: #424242;
+  color: black;
+  opacity: 0.5;
+  font-weight: 100;
 }
 .card {
   min-width: 300px;
