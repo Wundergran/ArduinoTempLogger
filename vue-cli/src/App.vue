@@ -4,7 +4,10 @@
       <v-toolbar-title>Arduino Temp Logger</v-toolbar-title>
     </v-toolbar>
     <div class="content">
-      <div class="temp-text display-3" v-if="lastTemp.temp">The temperature is now {{ lastTemp.temp }}°C</div>
+      <div class="temp-text-container display-3" v-if="lastTemp.temp">
+        <div class="temp-text">The temperature is now&nbsp;</div>
+        <div class="temp">{{ lastTemp.temp }}°C</div>
+      </div>
       <div class="card elevation-2">
         <chart :data="temps" v-if="temps"></chart>
       </div>
@@ -57,15 +60,24 @@ export default {
   margin: auto;
   margin-top: 24px;
 }
-.temp-text {
+.temp-text-container {
+  display: flex;
+  flex-direction: row;
   text-align: start;
   color: black;
-  opacity: 0.5;
   font-weight: 100;
+}
+.temp-text-container .temp-text {
+  opacity: 0.5;
+}
+.temp {
+  color: #3F51B5;
+  opacity: 1;
 }
 .card {
   min-width: 300px;
   padding: 16px;
   background-color: white;
+  border-radius: 3px;
 }
 </style>
