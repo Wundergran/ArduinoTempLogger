@@ -13,6 +13,7 @@ const FLD_TIME = 'time'
 const FLD_TEMP = 'temp'
 
 const DATA_EVENT = 'new-data'
+const READ_EVENT = 'temp-read'
 
 var latestTemp = null // Default void
 var temps = []
@@ -29,22 +30,25 @@ var sPort = new SerialPort('COM5', {
 
 io.on('connection', function(client){
   console.log('connected to localhost')
+  var tempEventListener = async () => {
+    if (latestTemp) {
+      client.emit('lasttemp', latestTemp)
+    }
+  }
   var eventListener = null 
+  eventEmitter.on(READ_EVENT, tempEventListener)
   client.on('listen', async function (args) {
     eventListener = async () => {
       const data = await fetchTemps(args.since)
       client.emit('temps', data)
-      client.emit('lasttemp', latestTemp)
     }
     eventEmitter.on(DATA_EVENT, eventListener) // listen for database changes
     client.emit('temps', await fetchTemps(args.since)) // send already existing data first
-    if (latestTemp) {
-      client.emit('lasttemp', latestTemp)
-    }
   })
 	client.on('disconnect', function(){ 
-    console.log('client disconnected')
+    console.log('client disconnected, event listeners destroyed')
     eventEmitter.removeListener(DATA_EVENT, eventListener)
+    eventEmitter.removeListener(READ_EVENT, tempEventListener)
   });
 });
 
@@ -65,6 +69,7 @@ async function dataRead (data) {
     }
     temps.push(json)
     latestTemp = json
+    eventEmitter.emit(READ_EVENT)
   } else {
     //console.log('Threw away garbage: ' + data.toString()) // Data read corrupted, throw away
     trashReads++
