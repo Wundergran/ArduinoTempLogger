@@ -56,7 +56,7 @@ io.on('connection', function(client){
 });
 
 try {
-	io.origins('localhost:8080')
+	io.origins('localhost:* 192.168.*:* 10.0.*:*')
 	io.listen(3000)
 } catch (err) {
 	console.log(err)
