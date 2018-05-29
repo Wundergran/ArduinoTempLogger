@@ -5,8 +5,9 @@
     </v-toolbar>
     <div class="content">
       <div class="temp-text-container display-3" v-if="lastTemp.temp">
-        <div class="temp-text">The temperature is now&nbsp;</div>
-        <div class="temp">{{ lastTemp.temp }}°C</div>
+        <div class="temp-text">It is currently&nbsp;</div>
+        <div class="temp">{{ lastTemp.temp }}°C&nbsp;</div>
+        <div class="temp-text">in the office</div>
       </div>
       <div class="card elevation-2">
         <chart :data="temps" v-if="temps"></chart>
