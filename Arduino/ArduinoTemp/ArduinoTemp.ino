@@ -21,7 +21,7 @@ void setup(){
 
 void loop(){
 
-  if(arrayCnt < 400000){
+  if(arrayCnt < 100000){
     temps = temps + (analogRead(A0) + offset);
     arrayCnt++;
     tempArrayCnt++;
