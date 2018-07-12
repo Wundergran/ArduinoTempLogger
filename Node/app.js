@@ -95,8 +95,8 @@ async function saveData (jsonData) {
     eventEmitter.emit(DATA_EVENT)
     console.log('EXECUTED: ' + query)
     // Calculate trash rate
-    var trashRate = (totalReads - (trashReads/2))/totalReads * 100 // Percentage trash
-    console.log(`Trash rate now at ${trashRate}%`)
+    // var trashRate = ((totalReads - trashReads)/totalReads) * 100 // Percentage trash
+    // console.log(`Trash rate now at ${trashRate}%`)
     totalReads = 0
     trashReads = 0
 	} catch (err) {
